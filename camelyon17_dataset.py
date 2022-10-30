@@ -149,7 +149,7 @@ def training(cam17_path: Path = Path("data", "camelyon17"), project_root: Path =
                     # get the annotation path for the related annotation for the current slide
                     path = Path(str(annotation_dir) + "/center_" + str(center_counter) + "/" + row[0][:-4] + ".xml")
                     annotations.append(path)
-                    labels.append("tumour")
+                    labels.append("tumor")
 
                 if node_counter == 5:
                     node_counter = 0
