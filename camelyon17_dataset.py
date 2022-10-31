@@ -157,8 +157,7 @@ def training(cam17_path: Path = Path("data", "camelyon17"), project_root: Path =
                     if patient_counter == 19:
                         center_counter = center_counter + 1
 
-        df["annotations"] = annotations
-        df["labels"] = labels
+        df["annotation"] = annotations
+        df["label"] = labels
         df["tags"] = ""
-        print(labels)
     return df
