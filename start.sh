@@ -6,4 +6,5 @@ pip install torch==1.10.0+cu113 torchvision==0.11.1+cu113 torchaudio===0.10.0+cu
 pip install wsipipe
 pip install pandas
 pip install openslide-python
+pip install scikit-learn
 python3 data_processing.py
