@@ -41,8 +41,7 @@ if __name__ == "__main__":
         row.annotation,
         row.slide,
         dset_loader,
-        5,
-        row.label
+        5
     )
     np_to_pil(labelled_image * 100)
 
