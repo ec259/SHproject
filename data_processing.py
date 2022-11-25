@@ -26,9 +26,14 @@ from sklearn.model_selection import train_test_split
 
 if __name__ == "__main__":
     data = camelyon17_dataset.training(cam17_path='/data/ec259/camelyon17/raw')
-    train_dset, test_dset = train_test_split(data, test_size=0.2)
-    dset_loader = Camelyon16Loader()
 
+    # split train and test 80/20
+    train_dset, test_dset = train_test_split(data, test_size=0.2)
+
+    # split training into train and validate (80/20)
+    train_dset, validate_dset = train_test_split(train_dset, test_size=0.2)
+
+    dset_loader = Camelyon16Loader()
     row = train_dset.iloc[0]
 
     # View slide
