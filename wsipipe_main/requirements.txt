@@ -1,0 +1,9 @@
+Click
+scipy
+scikit-image
+pandas
+numpy
+opencv-python
+Pillow
+openslide-python
+pylibCZIrw

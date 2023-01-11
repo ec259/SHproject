@@ -1,13 +1,5 @@
 import time
-import torch
-from torch import nn
-from torch.utils.data import DataLoader
-from torchvision.transforms import ToTensor
-from pathlib import Path
-from typing import Dict
-import pandas as pd
-import camelyon17_dataset
-import wsipipe
+import wsipipe.datasets.camelyon17 as camelyon17
 from wsipipe.datasets.dataset_utils import sample_dataset
 from wsipipe.utils import np_to_pil
 from wsipipe.load.annotations import visualise_annotations
@@ -22,10 +14,10 @@ from wsipipe.preprocess.patching import GridPatchFinder, make_patchset_for_slide
 from wsipipe.preprocess.patching import visualise_patches_on_slide
 from sklearn.model_selection import train_test_split
 from wsipipe.load.datasets.registry import register_loader
-from camelyon17 import Camelyon17Loader
+from wsipipe.load.datasets.camelyon17 import Camelyon17Loader
 
 if __name__ == "__main__":
-    data = camelyon17_dataset.training(cam17_path='/data/ec259/camelyon17/raw')
+    data = camelyon17.training(cam17_path='/data/ec259/camelyon17/raw')
 
     # split train and test 80/20
     train_dset, test_dset = train_test_split(data, test_size=0.2)
@@ -34,8 +26,6 @@ if __name__ == "__main__":
 
     # split training into train and validate (80/20)
     train_dset, validate_dset = train_test_split(train_dset, test_size=0.2)
-
-    dset_loader = Camelyon16Loader()
     row = train_dset.iloc[0]
 
     # View slide
@@ -76,7 +66,8 @@ if __name__ == "__main__":
     patchfinder = GridPatchFinder(patch_level=1, patch_size=512, stride=512, labels_level=5)
     pset = make_patchset_for_slide(row.slide, row.annotation, row.label, dset_loader, tisdet, patchfinder)
 
-    print("STARTING PATCH EXTRACTION: " + str(time.localtime()))
+    print("STARTING PATCH EXTRACTION: ")
+    start = time.time()
 
     # Patches for the whole dataset:
     psets_for_dset = make_and_save_patchsets_for_dataset(
@@ -87,7 +78,7 @@ if __name__ == "__main__":
         output_dir='/data/ec259/camelyon17/raw/patches'
     )
 
-    print("FINISHED PATCH EXTRACTION: " + str(time.localtime()))
+    print("FINISHED PATCH EXTRACTION: " + str(time.time() - start))
 
     # ----------- Patches for a single slide ----------------
     # patchfinder = GridPatchFinder(patch_level=1, patch_size=512, stride=512, labels_level=5)

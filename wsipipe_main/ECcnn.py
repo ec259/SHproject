@@ -2,14 +2,14 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader
 from torchvision.transforms import ToTensor
-import data_processing
+import ECdata_processing as ECdata_processing
 
 
 batch_size = 64
 
 # Wrap an iterable over the dataset by passing to dataloader
-train_dataloader = DataLoader(data_processing.train_dset, batch_size=batch_size)
-validate_dataloader = DataLoader(data_processing.validate_dset, batch_size=batch_size)
+train_dataloader = DataLoader(ECdata_processing.train_dset, batch_size=batch_size)
+validate_dataloader = DataLoader(ECdata_processing.validate_dset, batch_size=batch_size)
 
 for X, y in validate_dataloader:
     # N - number of images (in the batch), C - Number of channels(?) , H & W - height and width images are 28x28.
@@ -97,7 +97,7 @@ classes = [
 ]
 
 model.eval()
-x, y = data_processing.validate_dset[0][0], data_processing.validate_dset[0][1]
+x, y = ECdata_processing.validate_dset[0][0], ECdata_processing.validate_dset[0][1]
 with torch.no_grad():
     pred = model(x)
     predicted, actual = classes[pred[0].argmax(0)], classes[y]
