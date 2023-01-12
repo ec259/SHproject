@@ -18,5 +18,5 @@ pip install Pillow
 pip install pylibCZIrw
 pip install matplotlib
 
-python3 ECdata_processing.py
-#python3 ECcnn.py
+#python3 ECdata_processing.py
+python3 ECcnn.py
