@@ -15,19 +15,28 @@ from wsipipe.preprocess.patching import visualise_patches_on_slide
 from sklearn.model_selection import train_test_split
 from wsipipe.load.datasets.registry import register_loader
 from wsipipe.load.datasets.camelyon17 import Camelyon17Loader
+from wsipipe.preprocess.patching.patchset_utils import load_patchsets_from_directory, combine
+from wsipipe.preprocess.sample.sampler import balanced_sample
+from wsipipe.preprocess.patching.patchset import export_patches
 
-
-data = camelyon17.training(cam17_path='/data/ec259/camelyon17/raw')
+root = '/data/ec259/camelyon17/raw/'
+data = camelyon17.training(cam17_path=root)
 register_loader(Camelyon17Loader)
+dset_loader = Camelyon17Loader()
+
+# -- SPLITTING INTO TRAIN, TEST, VALIDATION
 
 # split train and test 80/20
 train_dset, test_dset = train_test_split(data, test_size=0.2)
-dset_loader = Camelyon17Loader()
 
 # split training into train and validate (80/20)
 train_dset, validate_dset = train_test_split(train_dset, test_size=0.2)
-row = train_dset.iloc[0]
 
+train_dset.save(root / "train_index17")
+test_dset.save(root / "test_index17")
+validate_dset.save(root / "valid_index17")
+
+row = train_dset.iloc[0]
 # View slide
 with dset_loader.load_slide(row.slide) as slide:
     thumb = slide.get_thumbnail(5)
@@ -61,35 +70,45 @@ np_to_pil(tissmask)
 
 visualise_tissue_detection_for_slide(row.slide, dset_loader, 5, tisdet)
 
-# -- PATCH EXTRACTION --
+# -- CREATING PATCHSET --
 
 patchfinder = GridPatchFinder(patch_level=1, patch_size=512, stride=512, labels_level=5)
 pset = make_patchset_for_slide(row.slide, row.annotation, row.label, dset_loader, tisdet, patchfinder)
 
-print("STARTING PATCH EXTRACTION: ")
+print("----- MAKING PATCHSETS ----- ")
 start = time.time()
 
-# Patches for the whole dataset:
+patch_dir = root / "patchsets"
+
+# Patchsets for the whole dataset in individual folders:
 psets_for_dset = make_and_save_patchsets_for_dataset(
     dataset=train_dset,
     loader=dset_loader,
     tissue_detector=tisdet,
     patch_finder=patchfinder,
-    output_dir='/data/ec259/camelyon17/raw/patches'
+    output_dir=patch_dir
 )
 
-print("FINISHED PATCH EXTRACTION: " + str(time.time() - start))
+print("----- FINISHED MAKING PATCHSETS: " + str(time.time() - start) + "-----")
 
-def get_train_dset():
-    return train_dset
+# -- LOAD ALL PATCHES -- 
+start = time.time()
+print("------ COMBINING AND BALANCING PATCH SET -----")
+loaded_psets = load_patchsets_from_directory(patch_dir)
 
-def get_test_dset():
-    return test_dset
+# -- COMBINE ALL PATCHES INTO ONE PATCHSET --
+combined_pset = combine(loaded_psets)
 
-def get_validate_dset():
-    return validate_dset
+# -- EXTRACT BALANCED SAMPLE FOR TRAIN AND VALIDATE --
+train_balanced_pset = balanced_sample(combined_pset, 10000)
+valid_balanced_pset = balanced_sample(combined_pset, 10000)
+print("------ FINISHED BALANCING PATCHSET:" + str(time.time() - start) + " -----")
 
-# ----------- Patches for a single slide ----------------
-# patchfinder = GridPatchFinder(patch_level=1, patch_size=512, stride=512, labels_level=5)
-# pset = make_patchset_for_slide(row.slide, row.annotation, dset_loader, tisdet, patchfinder)
-# visualise_patches_on_slide(pset, vis_level=5)
+# -- SAVE PATCHES -- 
+print("------ SAVING PATCHES -----")
+start = time.time()
+train_balanced_pset.save(root / "train_17")
+valid_balanced_pset.save(root / "validate_17")
+test_dset.save(root / "test_17")
+
+print("------ FINISHED SAVING PATCHES " +  str(time.time() - start) + "-----")
