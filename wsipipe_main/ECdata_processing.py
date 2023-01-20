@@ -17,9 +17,9 @@ from wsipipe.load.datasets.registry import register_loader
 from wsipipe.load.datasets.camelyon17 import Camelyon17Loader
 from wsipipe.preprocess.patching.patchset_utils import load_patchsets_from_directory, combine
 from wsipipe.preprocess.sample.sampler import balanced_sample
-from wsipipe.preprocess.patching.patchset import export_patches
+from pathlib import Path
 
-root = '/data/ec259/camelyon17/raw/'
+root = Path('/data/ec259/camelyon17/raw/')
 data = camelyon17.training(cam17_path=root)
 register_loader(Camelyon17Loader)
 dset_loader = Camelyon17Loader()
@@ -31,10 +31,6 @@ train_dset, test_dset = train_test_split(data, test_size=0.2)
 
 # split training into train and validate (80/20)
 train_dset, validate_dset = train_test_split(train_dset, test_size=0.2)
-
-train_dset.save(root / "train_index17")
-test_dset.save(root / "test_index17")
-validate_dset.save(root / "valid_index17")
 
 row = train_dset.iloc[0]
 # View slide
@@ -75,10 +71,9 @@ visualise_tissue_detection_for_slide(row.slide, dset_loader, 5, tisdet)
 patchfinder = GridPatchFinder(patch_level=1, patch_size=512, stride=512, labels_level=5)
 pset = make_patchset_for_slide(row.slide, row.annotation, row.label, dset_loader, tisdet, patchfinder)
 
-print("----- MAKING PATCHSETS ----- ")
+print("\n----- MAKING PATCHSETS ----- ")
 start = time.time()
-
-patch_dir = root / "patchsets"
+patch_dir = root / 'patchsets'
 
 # Patchsets for the whole dataset in individual folders:
 psets_for_dset = make_and_save_patchsets_for_dataset(
@@ -88,12 +83,11 @@ psets_for_dset = make_and_save_patchsets_for_dataset(
     patch_finder=patchfinder,
     output_dir=patch_dir
 )
-
 print("----- FINISHED MAKING PATCHSETS: " + str(time.time() - start) + "-----")
 
 # -- LOAD ALL PATCHES -- 
+print("\n----- COMBINING AND BALANCING PATCH SETS -----")
 start = time.time()
-print("------ COMBINING AND BALANCING PATCH SET -----")
 loaded_psets = load_patchsets_from_directory(patch_dir)
 
 # -- COMBINE ALL PATCHES INTO ONE PATCHSET --
@@ -102,13 +96,12 @@ combined_pset = combine(loaded_psets)
 # -- EXTRACT BALANCED SAMPLE FOR TRAIN AND VALIDATE --
 train_balanced_pset = balanced_sample(combined_pset, 10000)
 valid_balanced_pset = balanced_sample(combined_pset, 10000)
-print("------ FINISHED BALANCING PATCHSET:" + str(time.time() - start) + " -----")
+print("----- FINISHED BALANCING PATCHSETS:" + str(time.time() - start) + " -----")
 
-# -- SAVE PATCHES -- 
-print("------ SAVING PATCHES -----")
+# -- EXPORT ALL PATCHES FROM PATCHSET --
+print("\n----- CREATING PATCHES FROM PATCHSET -----")
 start = time.time()
-train_balanced_pset.save(root / "train_17")
-valid_balanced_pset.save(root / "validate_17")
-test_dset.save(root / "test_17")
+train_balanced_pset.export_patches(root / "train_17_patches")
+valid_balanced_pset.export_patches(root / "validate_17_patches")
+print("----- FINISHED CREATING PATCHES FROM PATCHSET " + str(time.time() - start) + "-----")
 
-print("------ FINISHED SAVING PATCHES " +  str(time.time() - start) + "-----")
