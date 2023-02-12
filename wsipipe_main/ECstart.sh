@@ -5,17 +5,19 @@
 python3 -m venv pytorchvenv
 source pytorchvenv/bin/activate
 pip install --upgrade pip
-pip install torch==1.10.0+cu113 torchvision==0.11.1+cu113 torchaudio===0.10.0+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
-pip install pandas
-pip install openslide-python
-pip install scikit-learn
-pip install opencv-python
-pip install Click
-pip install scipy
-pip install scikit-image
-pip install numpy
-pip install Pillow
-pip install pylibCZIrw
-pip install matplotlib
+pip install --upgrade torch
+pip install --upgrade torchvision
+pip install --upgrade pandas
+pip install --upgrade openslide-python
+pip install --upgrade scikit-learn
+pip install --upgrade opencv-python
+pip install --upgrade Click
+pip install --upgrade scipy
+pip install --upgrade scikit-image
+pip install --upgrade numpy
+pip install --upgrade Pillow
+pip install --upgrade pylibCZIrw
+pip install --upgrade matplotlib
 
-python3 ECcnn.py
+python3 ECdata_processing.py
+python3 ECresnet.py

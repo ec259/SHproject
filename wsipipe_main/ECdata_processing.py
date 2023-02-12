@@ -68,40 +68,61 @@ visualise_tissue_detection_for_slide(row.slide, dset_loader, 5, tisdet)
 
 # -- CREATING PATCHSET --
 
-patchfinder = GridPatchFinder(patch_level=1, patch_size=512, stride=512, labels_level=5)
-pset = make_patchset_for_slide(row.slide, row.annotation, row.label, dset_loader, tisdet, patchfinder)
+patchfinder = GridPatchFinder(patch_level=1, patch_size=256, stride=256, labels_level=5)
 
 print("\n----- MAKING PATCHSETS ----- ")
 start = time.time()
-patch_dir = root / 'patchsets'
+patchset_dir = root / 'patchsets'
 
 # Patchsets for the whole dataset in individual folders:
-psets_for_dset = make_and_save_patchsets_for_dataset(
+training_psets_for_dset = make_and_save_patchsets_for_dataset(
     dataset=train_dset,
     loader=dset_loader,
     tissue_detector=tisdet,
     patch_finder=patchfinder,
-    output_dir=patch_dir
+    output_dir=patchset_dir / 'training'
+)
+
+validation_psets_for_dset = make_and_save_patchsets_for_dataset(
+    dataset=validate_dset,
+    loader=dset_loader,
+    tissue_detector=tisdet,
+    patch_finder=patchfinder,
+    output_dir=patchset_dir / 'validation'
+)
+
+test_psets_for_dset = make_and_save_patchsets_for_dataset(
+    dataset=test_dset,
+    loader=dset_loader,
+    tissue_detector=tisdet,
+    patch_finder=patchfinder,
+    output_dir=patchset_dir / 'test'
 )
 print("----- FINISHED MAKING PATCHSETS: " + str(time.time() - start) + "-----")
 
-# -- LOAD ALL PATCHES -- 
+# -- LOAD ALL PATCHES --
 print("\n----- COMBINING AND BALANCING PATCH SETS -----")
 start = time.time()
-loaded_psets = load_patchsets_from_directory(patch_dir)
+loaded_training_psets = load_patchsets_from_directory(patchset_dir / 'training')
+loaded_validation_psets = load_patchsets_from_directory(patchset_dir / 'validation')
+loaded_test_psets = load_patchsets_from_directory(patchset_dir / 'test')
 
 # -- COMBINE ALL PATCHES INTO ONE PATCHSET --
-combined_pset = combine(loaded_psets)
+combined_training_pset = combine(loaded_training_psets)
+combined_validation_pset = combine(loaded_validation_psets)
+combined_test_pset = combine(loaded_test_psets)
 
 # -- EXTRACT BALANCED SAMPLE FOR TRAIN AND VALIDATE --
-train_balanced_pset = balanced_sample(combined_pset, 10000)
-valid_balanced_pset = balanced_sample(combined_pset, 10000)
-print("----- FINISHED BALANCING PATCHSETS:" + str(time.time() - start) + " -----")
+train_balanced_pset = balanced_sample(combined_training_pset, 200000)
+valid_balanced_pset = balanced_sample(combined_validation_pset, 200000)
+test_balanced_pset = balanced_sample(combined_test_pset, 200000)
+print("----- FINISHED BALANCING PATCHSETS: " + str(time.time() - start) + " -----")
 
 # -- EXPORT ALL PATCHES FROM PATCHSET --
 print("\n----- CREATING PATCHES FROM PATCHSET -----")
 start = time.time()
-train_balanced_pset.export_patches(root / "train_17_patches")
-valid_balanced_pset.export_patches(root / "validate_17_patches")
+train_balanced_pset.export_patches(root / 'patches' / "train_patches")
+valid_balanced_pset.export_patches(root / 'patches' / "validate_patches")
+test_balanced_pset.export_patches(root / 'patches' / "test_patches")
 print("----- FINISHED CREATING PATCHES FROM PATCHSET " + str(time.time() - start) + "-----")
 

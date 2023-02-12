@@ -7,3 +7,4 @@ opencv-python
 Pillow
 openslide-python
 pylibCZIrw
+torchvision>=14
