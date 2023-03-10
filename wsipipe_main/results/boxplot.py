@@ -19,6 +19,12 @@ for i in range(0, len(seeds)):
 fig = plt.figure()
 ax = plt.axes()
 bp = ax.boxplot(allSeedsAllRuns)
+ax.set_ylim(0, 100)
+plt.yticks(np.arange(0, 101, 10))
+plt.xticks([1,2,3,4,5,6,7,8,9,10], seeds)
+plt.ylabel("Validation Accuracy Percentage (%)")
+plt.xlabel("Seed Number")
+plt.title("Validation Accuracies for Different Seeds")
 plt.show()
 
 
