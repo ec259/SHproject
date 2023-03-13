@@ -50,21 +50,6 @@ def training(cam17_path: Path = Path("data", "camelyon17"), project_root: Path =
         annotation_paths = sorted(
             [p for p in annotation_dir.glob("*.xml")]
         )
-        # center_0_annotation_paths = sorted(
-        #     [p for p in center_0_annotations_dir.glob("*.xml")]
-        # )
-        # center_1_annotation_paths = sorted(
-        #     [p for p in center_1_annotations_dir.glob("*.xml")]
-        # )
-        # center_2_annotation_paths = sorted(
-        #     [p for p in center_2_annotations_dir.glob("*.xml")]
-        # )
-        # center_3_annotation_paths = sorted(
-        #     [p for p in center_3_annotations_dir.glob("*.xml")]
-        # )
-        # center_4_annotation_paths = sorted(
-        #     [p for p in center_4_annotations_dir.glob("*.xml")]
-        # )
         center_0_slide_paths = sorted(
             [p for p in center_0_slide_dir.glob("*.tif")]
         )
@@ -85,21 +70,6 @@ def training(cam17_path: Path = Path("data", "camelyon17"), project_root: Path =
         annotation_paths = sorted(
             [p.relative_to(project_root) for p in annotation_dir.glob("*.xml")]
         )
-        # center_0_annotation_paths = sorted(
-        #     [p.relative_to(project_root) for p in center_0_annotations_dir.glob("*.xml")]
-        # )
-        # center_1_annotation_paths = sorted(
-        #     [p.relative_to(project_root) for p in center_1_annotations_dir.glob("*.xml")]
-        # )
-        # center_2_annotation_paths = sorted(
-        #     [p.relative_to(project_root) for p in center_2_annotations_dir.glob("*.xml")]
-        # )
-        # center_3_annotation_paths = sorted(
-        #     [p.relative_to(project_root) for p in center_3_annotations_dir.glob("*.xml")]
-        # )
-        # center_4_annotation_paths = sorted(
-        #     [p.relative_to(project_root) for p in center_4_annotations_dir.glob("*.xml")]
-        # )
         center_0_slide_paths = sorted(
             [p.relative_to(project_root) for p in center_0_slide_dir.glob("*.tif")]
         )
