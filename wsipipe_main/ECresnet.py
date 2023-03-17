@@ -26,7 +26,7 @@ def run(seed, filename, aug_combo, lr, n_epochs):
     # Augmentation experiments
     if aug_combo is None:
         train_set = ImageFolder(root + '/patches/train_patches', transform=preprocess)
-        valid_set = ImageFolder(root + '/patches/validate_patches', transform=preprocess)
+        valid_set = ImageFolder(root + '/patches/test_patches', transform=preprocess)
         train_augmentations_set = train_set
     else:
         train_set = ImageFolder(root + '/patches/train_patches', transform=preprocess)
