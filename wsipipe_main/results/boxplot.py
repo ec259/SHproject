@@ -27,4 +27,5 @@ plt.xlabel("Seed Number")
 plt.title("Validation Accuracies for Different Seeds")
 plt.show()
 
+plt.savefig(fname="Seed_Experiment.png", dpi=350)
 

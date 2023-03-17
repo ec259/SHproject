@@ -30,7 +30,8 @@ def run(seed, filename, aug_combo, lr, n_epochs):
         train_augmentations_set = train_set
     else:
         train_set = ImageFolder(root + '/patches/train_patches', transform=preprocess)
-        valid_set = ImageFolder(root + '/patches/validate_patches', transform=preprocess)
+        # TEST SET for final experiment
+        valid_set = ImageFolder(root + '/patches/test_patches', transform=preprocess)
         augmented_set = ImageFolder(root + '/patches/train_patches', transform=aug_combo)
         train_augmentations_set = ConcatDataset([train_set, augmented_set])
 
@@ -116,6 +117,7 @@ def run(seed, filename, aug_combo, lr, n_epochs):
                 print('Improvement-Detected, save-model')
 
         net.train()
+    # END OF CITED CODE
 
     print(f"Finished Training -- Time taken: {time.time() - start} seconds")
     print(f"Train loss: {train_loss}")
@@ -128,4 +130,4 @@ def run(seed, filename, aug_combo, lr, n_epochs):
         writer.writerow([train_loss[w], train_acc[w], val_loss[w], val_acc[w]])
     file.close()
 
-    # END OF CITED CODE
+
