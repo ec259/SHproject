@@ -18,7 +18,7 @@ for i in range(0, 5):
 
 fig = plt.figure()
 ax = plt.axes()
-bp = ax.scatter(x, y, s=70, alpha=0.3, color='tab:blue', label="Accuracy Distribution")
+bp = ax.scatter(x, y, s=70, alpha=0.3, color='tab:blue', label="Individual Epoch Accuracy")
 
 z = np.polyfit(x, y, 1)
 p = np.poly1d(z)
