@@ -6,9 +6,9 @@ import matplotlib.colors as mcolors
 
 
 data = read_csv("TEST_RESULTS_2")
-train_acc = data["train_acc"].toList()
+train_acc = data["train_acc"].tolist()
 valid_acc = data["valid_acc"].tolist()
-epochs = list(range(1,33))
+epochs = list(range(1, 33))
 
 fig = plt.figure()
 ax = plt.axes()

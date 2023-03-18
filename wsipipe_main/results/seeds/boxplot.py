@@ -9,7 +9,7 @@ allSeedsAllRuns = []
 for i in range(0, len(seeds)):
     allRunsForSeed = []
     for j in range(0, 10):
-        data = read_csv("./seeds/seed_" + str(seeds[i]) + "_" + str(j))
+        data = read_csv("seed_" + str(seeds[i]) + "_" + str(j))
 
         valid_acc = data["valid_acc"].tolist()
         allRunsForSeed.extend(valid_acc)
