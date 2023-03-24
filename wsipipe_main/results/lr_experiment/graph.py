@@ -4,6 +4,7 @@ import csv
 from pandas import *
 import matplotlib.colors as mcolors
 
+plt.rcParams.update({'font.size': 14})
 learning_rates = [0.1, 0.01, 0.001, 0.0001, 0.00001]
 for i in range(0, len(learning_rates)):
     data = read_csv(str(learning_rates[i]))
