@@ -7,14 +7,15 @@ seeds = [0, 42, 64, 123, 256, 301, 598, 647, 999, 1011]
 allSeedsAllRuns = []
 
 for i in range(0, len(seeds)):
-    allRunsForSeed = []
+    topAccuraciesForSeed = []
     for j in range(0, 10):
         data = read_csv("seed_" + str(seeds[i]) + "_" + str(j))
 
         valid_acc = data["valid_acc"].tolist()
-        allRunsForSeed.extend(valid_acc)
-
-    allSeedsAllRuns.append(allRunsForSeed)
+        best = max(valid_acc)
+        topAccuraciesForSeed.append(best)
+    print(topAccuraciesForSeed)
+    allSeedsAllRuns.append(topAccuraciesForSeed)
 
 fig = plt.figure()
 ax = plt.axes()

@@ -20,11 +20,8 @@ fig = plt.figure()
 ax = plt.axes()
 bp = ax.scatter(x, y, s=70, alpha=0.3, color='tab:blue', label="Accuracy Distribution")
 
-z = np.polyfit(x, y, 1)
-p = np.poly1d(z)
-
 #add trendline to plot
-plt.plot(x, p(x), color='tab:orange', label="Trend Line")
+plt.plot(np.unique(x), np.poly1d(np.polyfit(x, y, 1))(np.unique(x)), color='tab:orange', label="Trend Line")
 
 ax.set_ylim(0, 100)
 ax.set_xlim(1, 32)

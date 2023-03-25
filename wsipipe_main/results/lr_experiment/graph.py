@@ -1,3 +1,5 @@
+import statistics
+
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
@@ -6,10 +8,12 @@ import matplotlib.colors as mcolors
 
 plt.rcParams.update({'font.size': 14})
 learning_rates = [0.1, 0.01, 0.001, 0.0001, 0.00001]
+best_lrs=[]
 for i in range(0, len(learning_rates)):
     data = read_csv(str(learning_rates[i]))
     train_acc = data["train_acc"].tolist()
     valid_acc = data["valid_acc"].tolist()
+    best_lrs.append(statistics.median(valid_acc))
     epochs = list(range(1, 11))
 
     fig = plt.figure()
@@ -26,3 +30,8 @@ for i in range(0, len(learning_rates)):
     plt.title("Train vs Validation Accuracy for LR=" + str(learning_rates[i]))
 
     plt.savefig(fname="LR_" + str(learning_rates[i]) + ".png", dpi=350)
+
+file = open("BestLRs.csv", "w")
+writer = csv.writer(file)
+writer.writerow(best_lrs)
+file.close()

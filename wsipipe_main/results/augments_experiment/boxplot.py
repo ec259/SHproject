@@ -9,7 +9,7 @@ allCombosAllRuns = []
 for i in range(0, len(combos)):
     allRunsForCombo = []
     for j in range(0, 4):
-        data = read_csv("combo_" + str(combos[i]) + "_" + str(j))
+        data = read_csv("files/combo_" + str(combos[i]) + "_" + str(j))
 
         valid_acc = data["valid_acc"].tolist()
         allRunsForCombo.extend(valid_acc)
@@ -20,7 +20,6 @@ fig = plt.figure()
 ax = plt.axes()
 bp = ax.boxplot(allCombosAllRuns)
 ax.set_ylim(0, 100)
-ax.set_xlim(-1, 16)
 plt.yticks(np.arange(0, 101, 10))
 plt.xticks([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], combos)
 plt.ylabel("Validation Accuracy Percentage (%)")
