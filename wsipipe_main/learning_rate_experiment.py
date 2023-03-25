@@ -1,4 +1,4 @@
-from ECresnet import run as model
+from resnet import run as model
 
 seed = 99
 learning_rates = [0.1, 0.01, 0.001, 0.0001, 0.00001]

@@ -1,4 +1,4 @@
-from ECresnet import run as model
+from resnet import run as model
 
 for i in range(0, 1):
     filename = f"./results/TEST_RESULTS_DIFF_LR" + str(i)

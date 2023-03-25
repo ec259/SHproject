@@ -1,4 +1,4 @@
-from ECresnet import run as model
+from resnet import run as model
 
 
 seeds = [0, 42, 123, 301, 256, 999, 647, 1011, 598, 64]

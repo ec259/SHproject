@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader, ConcatDataset
 from torchvision.datasets import ImageFolder
 from torchvision.models import resnet50
 
-from ECaugmentation_transforms import *
+from augmentation_transforms import *
 
 
 def accuracy(out, labels):

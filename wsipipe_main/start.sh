@@ -20,4 +20,3 @@ pip install --upgrade pylibCZIrw
 pip install --upgrade matplotlib
 
 python3 ECdata_processing.py
-python3 ECresnet.py

@@ -1,5 +1,5 @@
-from ECresnet import run as model
-from ECaugmentation_transforms import *
+from resnet import run as model
+from augmentation_transforms import *
 
 seed = 99
 augments = [None, combo_1, combo_2, combo_3, combo_4, combo_5, combo_6, combo_7, combo_8, combo_9, combo_10, combo_11,
